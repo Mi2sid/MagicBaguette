@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     float m_speed;
     public Transform centerPoint;
 
+    public PlayerController m_other;
+    float m_minDistance = 1.5f;
 
     void Start()
     {
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveAround();
+        transform.LookAt(m_other.transform.position);
     }
 
     void OnMove(InputValue inputValue){
@@ -32,9 +35,21 @@ public class PlayerController : MonoBehaviour
     }
 
     void MoveAround(){
+        Vector3 difference = m_other.transform.position - transform.position;
+
+        if(difference.magnitude < m_minDistance){
+            Vector3 crossProduct = Vector3.Cross(-transform.position, difference);
+
+            if (crossProduct.y > 0f && m_direction > 0f){
+                m_animator.SetFloat("Speed", 0f);
+                return;
+            }
+            else if (crossProduct.y < 0f  && m_direction < 0f){
+                m_animator.SetFloat("Speed", 0f);
+                return;
+            }
+        }
         m_animator.SetFloat("Speed", m_direction);
         transform.RotateAround(centerPoint.position, Vector3.up, -m_direction * m_speed * Time.deltaTime);
-
-
     }
 }
