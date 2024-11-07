@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,20 +6,90 @@ using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
+    Color[] COLORS = {Color.gray, Color.yellow, Color.green, Color.blue}; 
     public Slider m_slideBar;
+    private Image m_bgImage;
+    private Image m_fillImage;
     public float m_maxLife;
-    public float m_lifePercentage;
-    void Start()
+    public List<float> m_lifes;
+    int m_currentBar;
+    void Awake()
     {
-        m_lifePercentage = 1f;
-        m_slideBar.value = m_lifePercentage; 
+        m_bgImage = m_slideBar.transform.Find("Background").GetComponent<Image>();
+        m_fillImage = m_slideBar.transform.Find("Fill Area/Fill").GetComponent<Image>();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        InitializeLifeBars();
+        UpdateLifeBarUI();
+        UpdateColors();
+    }
+
     void Update()
     {
-        m_lifePercentage -= 0.001f;
-        m_slideBar.value = m_lifePercentage; 
+        takeDammage(0.1f);
+        UpdateLifeBarUI();
+    }
 
+    void UpdateLifeBarUI(){
+        if(isDead())
+            return /* Un joueur mort ne peux pas changer sa bar de vie */;
+        m_slideBar.value = m_lifes[m_currentBar] / 100.0f;
+    }
+
+    void InitializeLifeBars(){
+        m_lifes = new() { 0.0f, 0.0f, 0.0f };
+
+        float remainingLife = m_maxLife;
+        int i;
+        for (i=0; i<m_lifes.Count; i++)
+        {
+            m_lifes[i] = MathF.Min(100.0f, remainingLife);
+
+            if(m_lifes[i] <= 0.0f) break;
+            
+            remainingLife -= m_lifes[i];
+        }
+
+        m_currentBar = i-1;
+    }
+
+    void takeDammage(float damage){
+        if(isDead())
+            return /* Un joueur mort ne peux pas prendre de dégât */;
+
+        bool needToChangeBarColor = false;
+        while (damage > 0.0f && m_currentBar >= 0)
+        {
+            if (m_lifes[m_currentBar] > damage)
+            {
+                m_lifes[m_currentBar] -= damage;
+                damage = 0.0f;
+            }
+            else
+            {
+                damage -= m_lifes[m_currentBar];
+                m_lifes[m_currentBar] = 0.0f;
+                m_currentBar--;
+                needToChangeBarColor = true;
+            }
+        }
+
+        if(needToChangeBarColor)
+            UpdateColors();
+    }
+
+    void UpdateColors(){
+        if(isDead()){
+            m_fillImage.color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+        } else {
+            m_bgImage.color = COLORS[m_currentBar];
+            m_fillImage.color = COLORS[m_currentBar + 1];
+        }
+    }
+
+    bool isDead(){
+        return m_currentBar == -1;
     }
 }

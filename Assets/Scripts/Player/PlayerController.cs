@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue inputValue){
         m_direction = inputValue.Get<Vector2>().x;
+        Debug.Log(this.name);
     }
 
     void MoveAround(){
