@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class HealthManager : MonoBehaviour
 {
-    Color[] COLORS = {Color.gray, Color.yellow, Color.green, Color.blue}; 
+    static Color[] COLORS = {new(0.2f, 0.2f, 0.2f, 0.4f), new(0.96f,0.68f,0.15f, 1.0f), new(0.08f,0.7f,0.33f, 1.0f), new(0.1f,0.45f,0.9f, 1.0f)}; 
     public Slider m_slideBar;
     private Image m_bgImage;
     private Image m_fillImage;
@@ -28,14 +28,13 @@ public class HealthManager : MonoBehaviour
 
     void Update()
     {
-        takeDammage(0.1f);
         UpdateLifeBarUI();
     }
 
     void UpdateLifeBarUI(){
         if(isDead())
             return /* Un joueur mort ne peux pas changer sa bar de vie */;
-        m_slideBar.value = m_lifes[m_currentBar] / 100.0f;
+        m_slideBar.value = m_lifes[m_currentBar];
     }
 
     void InitializeLifeBars(){
@@ -55,7 +54,7 @@ public class HealthManager : MonoBehaviour
         m_currentBar = i-1;
     }
 
-    void takeDammage(float damage){
+    public void takeDammage(float damage){
         if(isDead())
             return /* Un joueur mort ne peux pas prendre de dégât */;
 

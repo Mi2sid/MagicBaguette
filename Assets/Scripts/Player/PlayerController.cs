@@ -13,10 +13,13 @@ public class PlayerController : MonoBehaviour
     public Transform centerPoint;
 
     public PlayerController m_other;
+
+    HealthManager m_health;
     float m_minDistance = 1.5f;
 
     void Start()
     {
+        m_health = GetComponent<HealthManager>();
         m_animator = GetComponent<Animator>();
         m_rigidBody = FindObjectOfType<Rigidbody>();
 
@@ -27,12 +30,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveAround();
+        m_health.takeDammage(0.01f);
+
         transform.LookAt(m_other.transform.position);
     }
 
     void OnMove(InputValue inputValue){
         m_direction = inputValue.Get<Vector2>().x;
-        Debug.Log(this.name);
     }
 
     void MoveAround(){
