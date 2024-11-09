@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,11 +54,8 @@ public class HealthManager : MonoBehaviour
     }
 
     public void takeDammage(float damage){
-        if(isDead())
-            return /* Un joueur mort ne peux pas prendre de dégât */;
-
         bool needToChangeBarColor = false;
-        while (damage > 0.0f && m_currentBar >= 0)
+        while (damage > 0.0f && !isDead())
         {
             if (m_lifes[m_currentBar] > damage)
             {
