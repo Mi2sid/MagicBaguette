@@ -20,8 +20,8 @@ public class ManaManager : MonoBehaviour
 
     void Start()
     {
-        m_rectTransform.sizeDelta = new Vector2(m_maxMana, m_rectTransform.sizeDelta.y);
-        m_rectTransform.anchoredPosition3D = new Vector3(m_maxMana * m_rectTransform.anchoredPosition3D.x * 0.5f , m_rectTransform.anchoredPosition3D.y, m_rectTransform.anchoredPosition3D.z);
+        m_rectTransform.sizeDelta = new Vector2(m_maxMana * 2f, m_rectTransform.sizeDelta.y);
+        m_rectTransform.anchoredPosition3D = new Vector3(m_rectTransform.sizeDelta.x * m_rectTransform.anchoredPosition3D.x * 0.5f + m_rectTransform.anchoredPosition3D.x * 3f , m_rectTransform.anchoredPosition3D.y, m_rectTransform.anchoredPosition3D.z);
 
         m_mana = 20;
         m_slideBar.maxValue = m_maxMana;
