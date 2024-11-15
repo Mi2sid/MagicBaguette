@@ -53,7 +53,7 @@ public class HealthManager : MonoBehaviour
         m_currentBar = i-1;
     }
 
-    public void takeDammage(float damage){
+    public void Dammage(float damage){
         bool needToChangeBarColor = false;
         while (damage > 0.0f && !isDead())
         {
@@ -67,6 +67,28 @@ public class HealthManager : MonoBehaviour
                 damage -= m_lifes[m_currentBar];
                 m_lifes[m_currentBar] = 0.0f;
                 m_currentBar--;
+                needToChangeBarColor = true;
+            }
+        }
+
+        if(needToChangeBarColor)
+            UpdateColors();
+    }
+
+    public void Heal(float heal){
+        bool needToChangeBarColor = false;
+        while (heal > 0.0f && !isDead())
+        {
+            if (100f - m_lifes[m_currentBar] > heal)
+            {
+                m_lifes[m_currentBar] += heal;
+                heal = 0.0f;
+            }
+            else
+            {
+                heal -= 100f - m_lifes[m_currentBar];
+                m_lifes[m_currentBar] = 100.0f;
+                m_currentBar++;
                 needToChangeBarColor = true;
             }
         }

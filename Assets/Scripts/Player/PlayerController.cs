@@ -11,8 +11,10 @@ public class PlayerController : MonoBehaviour
 
     public PlayerController m_other;
 
-    HealthManager m_health;
+    public HealthManager m_health;
+    public ManaManager m_manaManager;
     float m_minDistance = 1.5f;
+    public Spell spell;
 
     void Start()
     {
@@ -27,7 +29,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveAround();
-        m_health.takeDammage(0.01f);
+        m_health.Dammage(0.01f);
 
         transform.LookAt(m_other.transform.position);
     }
@@ -53,5 +55,9 @@ public class PlayerController : MonoBehaviour
         }
         m_animator.SetFloat("Speed", m_direction);
         transform.RotateAround(centerPoint.position, Vector3.up, -m_direction * m_speed * Time.deltaTime);
+    }
+
+    void OnFire(){
+        spell.Use(m_other, this);
     }
 }
