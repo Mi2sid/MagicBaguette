@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     public Transform m_middlePart;
     public Transform m_position;
 
-    float m_MawDistance = 6f;
+    float m_MawDistance = 7f;
 
     void Start()
     {

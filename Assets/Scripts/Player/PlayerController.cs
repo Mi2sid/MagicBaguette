@@ -13,8 +13,11 @@ public class PlayerController : MonoBehaviour
 
     public HealthManager m_health;
     public ManaManager m_manaManager;
+
+    public SpellController m_spellController;
+
     float m_minDistance = 1.5f;
-    public Spell spell;
+    private bool canAct = true;
 
     void Start()
     {
@@ -22,15 +25,20 @@ public class PlayerController : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_rigidBody = FindObjectOfType<Rigidbody>();
 
+        m_spellController = GetComponentInChildren<SpellController>();
+        m_spellController.m_player = this;
+
         m_direction = 0f;
         m_speed = 70f;
     }
 
     void Update()
     {
-        MoveAround();
         m_health.Dammage(0.01f);
+     
+        if(!canAct) return;
 
+        MoveAround();
         transform.LookAt(m_other.transform.position);
     }
 
@@ -58,6 +66,18 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnFire(){
-        spell.Use(m_other, this);
+        m_spellController.Fire();
+    }
+
+    public void LockPlayer()
+    {
+        canAct = false;
+        Invoke("UnlockPlayer", 5f);
+    }
+
+    void UnlockPlayer()
+    {
+        canAct = true; 
+        Debug.Log("Le joueur peut maintenant agir.");
     }
 }
