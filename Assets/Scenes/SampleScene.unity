@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.19559151, g: 0.23698464, b: 0.31058577, a: 1}
+  m_IndirectSpecularColor: {r: 0.19557694, g: 0.23695657, b: 0.310541, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cbeb8c864749748a8c7c47247bddba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 813879837}
+  player: {fileID: 1995301905}
 --- !u!1 &414525867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1363,11 +1363,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9e187dfcc0ebe46af9c42cfb8ca0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_animator: {fileID: 0}
   centerPoint: {fileID: 1317664387}
   m_other: {fileID: 1995301902}
   m_health: {fileID: 813879842}
   m_manaManager: {fileID: 813879843}
-  m_speelController: {fileID: 0}
+  m_spellController: {fileID: 0}
+  canAct: 1
+  takingDmg: 0
 --- !u!114 &813879841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1410,7 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd92b3ae0ec0654282eb15c94a14756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_slideBar: {fileID: 2017840182}
+  m_slideBar: {fileID: 114540307}
   m_maxLife: 250
   m_lifes: []
 --- !u!114 &813879843
@@ -1428,7 +1431,7 @@ MonoBehaviour:
   m_maxMana: 50
   m_mana: 0
   m_regenPerSecond: 2
-  m_sliderObject: {fileID: 529745511}
+  m_sliderObject: {fileID: 876121927}
 --- !u!136 &813879844
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1972,6 +1975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpellPrefab: {fileID: 4038169873240247046, guid: 8edfa50782f052a4f818fd09a7ee336a, type: 3}
   m_player: {fileID: 813879840}
+  m_startSpell: 0
 --- !u!1 &1080249771
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,7 +2376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cbeb8c864749748a8c7c47247bddba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1995301905}
+  player: {fileID: 813879837}
 --- !u!1 &1265089586
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,6 +2507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpellPrefab: {fileID: 4038169873240247046, guid: 8edfa50782f052a4f818fd09a7ee336a, type: 3}
   m_player: {fileID: 1995301902}
+  m_startSpell: 0
 --- !u!1 &1401075993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3063,11 +3068,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9e187dfcc0ebe46af9c42cfb8ca0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_animator: {fileID: 0}
   centerPoint: {fileID: 1317664387}
   m_other: {fileID: 813879840}
   m_health: {fileID: 1995301906}
   m_manaManager: {fileID: 1995301907}
-  m_speelController: {fileID: 0}
+  m_spellController: {fileID: 0}
+  canAct: 1
+  takingDmg: 0
 --- !u!54 &1995301903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3134,7 +3142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd92b3ae0ec0654282eb15c94a14756, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_slideBar: {fileID: 114540307}
+  m_slideBar: {fileID: 2017840182}
   m_maxLife: 170
   m_lifes: []
 --- !u!114 &1995301907
@@ -3152,7 +3160,7 @@ MonoBehaviour:
   m_maxMana: 100
   m_mana: 0
   m_regenPerSecond: 4
-  m_sliderObject: {fileID: 876121927}
+  m_sliderObject: {fileID: 529745511}
 --- !u!136 &1995301908
 CapsuleCollider:
   m_ObjectHideFlags: 0

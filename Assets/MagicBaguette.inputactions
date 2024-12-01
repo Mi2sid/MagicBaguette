@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Other",
+                    "type": "Button",
+                    "id": "af646e6f-42c4-4e85-adce-b6980ad8a26a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -136,11 +145,22 @@
                 {
                     "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4428d38-8902-419e-a089-898ba7516b30",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Other",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -172,6 +192,15 @@
                     "name": "Fire",
                     "type": "Button",
                     "id": "fbfe44cd-0852-4f04-9373-cfdf77da2b81",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Other",
+                    "type": "Button",
+                    "id": "666478d1-c3b5-45e1-b354-c2a93147ade8",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -281,11 +310,22 @@
                 {
                     "name": "",
                     "id": "8e4c5bc2-f7ad-4b44-89c6-bbad38880cea",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a79c66c2-7934-4c7d-95fa-330f3069402e",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Other",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

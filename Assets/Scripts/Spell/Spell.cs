@@ -12,13 +12,9 @@ public abstract class Spell : MonoBehaviour
 
     public bool IsOnCooldown => isOnCooldown;
 
-    public void Use(PlayerController enemy, PlayerController player)
+    public void Use(PlayerController player)
     {
-
-        ApplyEffectOnEnemy(enemy);
-        ApplyEffectOnPlayer(player);
         player.m_manaManager.m_mana -= ManaCost;
-
         StartCoroutine(HandleCooldown());
     }
 

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    Animator m_animator;
+    public Animator m_animator;
     Rigidbody m_rigidBody;
     float m_direction;
     float m_speed;
@@ -17,7 +17,11 @@ public class PlayerController : MonoBehaviour
     public SpellController m_spellController;
 
     float m_minDistance = 1.5f;
-    private bool canAct = true;
+    public bool canAct = true;
+    public bool takingDmg = false;
+    public bool invokeSpell = false;
+
+    public int lastInput = -1;
 
     void Start()
     {
@@ -36,14 +40,21 @@ public class PlayerController : MonoBehaviour
     {
         m_health.Dammage(0.01f);
      
-        if(!canAct) return;
+        if(!canAct || takingDmg) return;
 
         MoveAround();
         transform.LookAt(m_other.transform.position);
     }
 
     void OnMove(InputValue inputValue){
-        m_direction = inputValue.Get<Vector2>().x;
+        float value = inputValue.Get<Vector2>().x;
+        if(invokeSpell){
+            if(((int) value) == 0) return;
+            lastInput = ((int) value + 4) % 4;
+            Debug.Log(lastInput);
+            return;
+        }
+        m_direction = value;
     }
 
     void MoveAround(){
@@ -66,13 +77,27 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnFire(){
+        if(invokeSpell){
+            Debug.Log(0);
+            lastInput = 0;
+            return;
+        }
+
         m_spellController.Fire();
+    }
+
+    void OnOther(){
+        if(invokeSpell){
+            Debug.Log(2);
+            lastInput = 2;
+            return;
+        }
     }
 
     public void LockPlayer()
     {
         canAct = false;
-        Invoke("UnlockPlayer", 5f);
+        Invoke("UnlockPlayer", 1f);
     }
 
     void UnlockPlayer()
