@@ -40,10 +40,11 @@ public class PlayerController : MonoBehaviour
     {
         m_health.Dammage(0.01f);
      
-        if(!canAct || takingDmg) return;
-
-        MoveAround();
+        if(takingDmg) return;
         transform.LookAt(m_other.transform.position);
+
+        if(!canAct) return;
+        MoveAround();        
     }
 
     void OnMove(InputValue inputValue){
@@ -51,7 +52,6 @@ public class PlayerController : MonoBehaviour
         if(invokeSpell){
             if(((int) value) == 0) return;
             lastInput = ((int) value + 4) % 4;
-            Debug.Log(lastInput);
             return;
         }
         m_direction = value;
@@ -77,8 +77,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnFire(){
+        m_direction = 0f;
         if(invokeSpell){
-            Debug.Log(0);
             lastInput = 0;
             return;
         }
@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
 
     void OnOther(){
         if(invokeSpell){
-            Debug.Log(2);
             lastInput = 2;
             return;
         }

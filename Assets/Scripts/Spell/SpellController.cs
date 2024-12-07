@@ -16,8 +16,14 @@ public class SpellController : MonoBehaviour
     public int current = 0;
     public int len = 3;
 
+    public GameObject m_directions;
+
     public List<int> series;
     int spellId = 0;
+
+    int[] m_rotations = {90, 0, 270, 180};
+
+    public GameObject m_offence;
 
     void Start()
     {
@@ -26,8 +32,12 @@ public class SpellController : MonoBehaviour
         spell = spellObject.GetComponent<Spell>();
         m_animator = transform.root.GetComponent<Animator>();
 
+
         m_spellCollider.enabled = false;
         m_startSpell = false;
+        m_directions.SetActive(false);
+        m_offence.SetActive(false);
+
     }
 
     void Update()
@@ -37,23 +47,31 @@ public class SpellController : MonoBehaviour
 
         if(!m_player.takingDmg){
             if(current >= len) {
+                m_directions.SetActive(false);
+                m_offence.SetActive(true);
                 m_player.invokeSpell = false;
                 m_animator.SetTrigger("Spell");
 
                 spell.Use(m_player);
+                spell.ApplyEffectOnPlayer(m_player);
+
 
                 m_spellCollider.enabled = true;
 
                 StartCoroutine(EndSpellCd(spellId));
                 return;
             }
+            m_directions.transform.rotation = Quaternion.Euler(0, 0, m_rotations[series[current]]);
 
             if(m_player.lastInput == -1) return;
-            if(m_player.lastInput == series[current]){current++; Debug.Log("target" + series[current]);} 
+            if(m_player.lastInput == series[current]){current++;} 
             else current = 0;
             m_player.lastInput = -1;
             return;
         }
+        m_player.canAct = true;
+
+        m_directions.SetActive(false);
         m_player.invokeSpell = false;
     }
 
@@ -83,12 +101,14 @@ public class SpellController : MonoBehaviour
 
         if (id == spellId)
         {
-            EndSpell();
+            EndSpell();   
         }
     }
 
     void EndSpell(){
         m_spellCollider.enabled = false;
+        m_offence.SetActive(false);
+
         m_player.canAct = true;
     }
 
@@ -101,8 +121,7 @@ public class SpellController : MonoBehaviour
         }
         current = 0;
 
-        Debug.Log("target " + series[current]);
-
+        m_directions.SetActive(true);
         m_player.invokeSpell = true;
         m_player.lastInput = -1;
     }
@@ -112,7 +131,6 @@ public class SpellController : MonoBehaviour
         PlayerController otherPlayer = other.gameObject.GetComponent<PlayerController>();
         if(otherPlayer != null && otherPlayer != m_player){
             spell.ApplyEffectOnEnemy(otherPlayer);
-            spell.ApplyEffectOnPlayer(m_player);
 
             otherPlayer.takingDmg = true;
             otherPlayer.m_animator.SetTrigger("Dammage");
