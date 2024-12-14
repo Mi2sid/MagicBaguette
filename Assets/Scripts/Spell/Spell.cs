@@ -8,13 +8,18 @@ public abstract class Spell : MonoBehaviour
     public float Cooldown { get; protected set; }
     public float ManaCost { get; protected set; }
 
+    public int Complexity { get; protected set; }
+
+    public string Name { get; protected set; }
+
+    public bool isOffense { get; protected set; }
     public bool isOnCooldown = false;
 
     public bool IsOnCooldown => isOnCooldown;
 
-    public void Use(PlayerController player)
+    public void Use(PlayerController player, float percentage)
     {
-        player.m_manaManager.m_mana -= ManaCost;
+        player.m_manaManager.m_mana -= ManaCost * percentage;
         StartCoroutine(HandleCooldown());
     }
 
@@ -25,6 +30,6 @@ public abstract class Spell : MonoBehaviour
         isOnCooldown = false;
     }
 
-    public abstract void ApplyEffectOnEnemy(PlayerController enemy);
+    public abstract void ApplyEffectOnEnemy(PlayerController enemy, PlayerController player);
     public abstract void ApplyEffectOnPlayer(PlayerController player);
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerUiController : MonoBehaviour
 {
     public Transform player;
-    // Start is called before the first frame update
+
     void Start()
     {
         
@@ -14,5 +14,8 @@ public class PlayerUiController : MonoBehaviour
     {
         transform.position = player.transform.position;
         transform.rotation = player.transform.rotation;
+
+
+
     }
 }

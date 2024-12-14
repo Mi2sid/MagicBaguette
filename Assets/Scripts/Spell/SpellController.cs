@@ -8,13 +8,14 @@ public class SpellController : MonoBehaviour
 {
     CapsuleCollider m_spellCollider;
     Animator m_animator;
-    public GameObject SpellPrefab;
-    Spell spell;
+    public List<GameObject> SpellsPrefab;
+    public List<Spell> m_spells;
     public PlayerController m_player;
     public bool m_startSpell;
 
     public int current = 0;
     public int len = 3;
+    public int m_currentSpell = 0;
 
     public GameObject m_directions;
 
@@ -28,8 +29,13 @@ public class SpellController : MonoBehaviour
     void Start()
     {
         m_spellCollider = gameObject.GetComponentInChildren<CapsuleCollider>();
-        GameObject spellObject = Instantiate(SpellPrefab, transform);
-        spell = spellObject.GetComponent<Spell>();
+        m_spells = new List<Spell>();
+        foreach(GameObject prefab in SpellsPrefab){
+            GameObject spellObject = Instantiate(prefab, transform);
+            Spell spell = spellObject.GetComponent<Spell>();
+            if (spell != null) 
+                m_spells.Add(spell);
+        }
         m_animator = transform.root.GetComponent<Animator>();
 
 
@@ -48,15 +54,19 @@ public class SpellController : MonoBehaviour
         if(!m_player.takingDmg){
             if(current >= len) {
                 m_directions.SetActive(false);
-                m_offence.SetActive(true);
+
+                if(m_spells[m_currentSpell].isOffense){
+                    m_offence.SetActive(true);
+                }
                 m_player.invokeSpell = false;
                 m_animator.SetTrigger("Spell");
 
-                spell.Use(m_player);
-                spell.ApplyEffectOnPlayer(m_player);
+                m_spells[m_currentSpell].Use(m_player, 1f);
+                m_spells[m_currentSpell].ApplyEffectOnPlayer(m_player);
 
-
-                m_spellCollider.enabled = true;
+                if(m_spells[m_currentSpell].isOffense){
+                    m_spellCollider.enabled = true;
+                }
 
                 StartCoroutine(EndSpellCd(spellId));
                 return;
@@ -65,20 +75,29 @@ public class SpellController : MonoBehaviour
 
             if(m_player.lastInput == -1) return;
             if(m_player.lastInput == series[current]){current++;} 
-            else current = 0;
+            else {
+
+                m_player.canAct = true;
+                m_spells[m_currentSpell].Use(m_player, (float) current/ len);
+
+                m_directions.SetActive(false);
+                m_player.invokeSpell = false;
+
+            };
             m_player.lastInput = -1;
             return;
         }
         m_player.canAct = true;
+        m_spells[m_currentSpell].Use(m_player, (float) current/ len);
 
         m_directions.SetActive(false);
         m_player.invokeSpell = false;
     }
 
     void Use() {
-        if (!spell.isOnCooldown)
+        if (!m_spells[m_currentSpell].isOnCooldown)
         {
-            if(m_player.m_manaManager.m_mana > spell.ManaCost){
+            if(m_player.m_manaManager.m_mana > m_spells[m_currentSpell].ManaCost){
                 spellId++;
                 m_player.canAct = false;
                 m_animator.SetFloat("Speed", 0f);
@@ -86,12 +105,12 @@ public class SpellController : MonoBehaviour
                 InputValidate();
 
             } else {
-                Debug.Log("Pas assez de mana...");
+                //Debug.Log("Pas assez de mana...");
             }
         }
         else
         {
-            Debug.Log("Compétence en cooldown !");
+            //Debug.Log("Compétence en cooldown !");
         }
     }
 
@@ -115,6 +134,9 @@ public class SpellController : MonoBehaviour
     void InputValidate() {
         System.Random random = new System.Random();
         series = new List<int>();
+        len = m_spells[m_currentSpell].Complexity;
+        if(m_player.torment)
+            len++;
         for (int i = 0; i < len; i++)
         {
             series.Add(random.Next(0, 4));
@@ -130,13 +152,16 @@ public class SpellController : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         PlayerController otherPlayer = other.gameObject.GetComponent<PlayerController>();
         if(otherPlayer != null && otherPlayer != m_player){
-            spell.ApplyEffectOnEnemy(otherPlayer);
+            if(!otherPlayer.isProtected){
+                m_spells[m_currentSpell].ApplyEffectOnEnemy(otherPlayer, m_player);
 
-            otherPlayer.takingDmg = true;
-            otherPlayer.m_animator.SetTrigger("Dammage");
+                otherPlayer.takingDmg = true;
+                otherPlayer.m_animator.SetTrigger("Dammage");
             
-            StartCoroutine(UnDamage(otherPlayer));
-
+                StartCoroutine(UnDamage(otherPlayer));
+            } else {
+                otherPlayer.isProtected = false;
+            }
             m_spellCollider.enabled = false;
         }
     }

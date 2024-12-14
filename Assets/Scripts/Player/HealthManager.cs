@@ -106,7 +106,7 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    bool isDead(){
+    public bool isDead(){
         return m_currentBar == -1;
     }
 }
