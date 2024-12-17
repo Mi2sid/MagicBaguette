@@ -13,6 +13,7 @@ public class SpellController : MonoBehaviour
     public PlayerController m_player;
     public bool m_startSpell;
 
+    public SoundController sounds;
     public int current = 0;
     public int len = 3;
     public int m_currentSpell = 0;
@@ -68,17 +69,23 @@ public class SpellController : MonoBehaviour
                     m_spellCollider.enabled = true;
                 }
 
+                sounds.PlaySpell();
                 StartCoroutine(EndSpellCd(spellId));
                 return;
             }
             m_directions.transform.rotation = Quaternion.Euler(0, 0, m_rotations[series[current]]);
 
             if(m_player.lastInput == -1) return;
-            if(m_player.lastInput == series[current]){current++;} 
+            if(m_player.lastInput == series[current]){
+                current++;
+                sounds.PlayClick();
+            } 
             else {
 
                 m_player.canAct = true;
                 m_spells[m_currentSpell].Use(m_player, (float) current/ len);
+                
+                sounds.PlayError();
 
                 m_directions.SetActive(false);
                 m_player.invokeSpell = false;
@@ -89,6 +96,7 @@ public class SpellController : MonoBehaviour
         }
         m_player.canAct = true;
         m_spells[m_currentSpell].Use(m_player, (float) current/ len);
+
 
         m_directions.SetActive(false);
         m_player.invokeSpell = false;
@@ -103,13 +111,16 @@ public class SpellController : MonoBehaviour
                 m_animator.SetFloat("Speed", 0f);
 
                 InputValidate();
+                sounds.PlayClick();
 
             } else {
+                sounds.PlayError();
                 //Debug.Log("Pas assez de mana...");
             }
         }
         else
         {
+            sounds.PlayError();
             //Debug.Log("Compétence en cooldown !");
         }
     }
@@ -154,6 +165,8 @@ public class SpellController : MonoBehaviour
         if(otherPlayer != null && otherPlayer != m_player){
             if(!otherPlayer.isProtected){
                 m_spells[m_currentSpell].ApplyEffectOnEnemy(otherPlayer, m_player);
+                
+                sounds.PlayHurt();
 
                 otherPlayer.takingDmg = true;
                 otherPlayer.m_animator.SetTrigger("Dammage");

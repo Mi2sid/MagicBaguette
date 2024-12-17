@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class Info : MonoBehaviour
 {
+    
+    public AudioSource audioSource;
+
     public GameObject image;
     bool state = false;
     // Start is called before the first frame update
@@ -21,6 +24,7 @@ public class Info : MonoBehaviour
     }
 
     public void toggleImage(){
+        audioSource.Play();
         state = !state;
         image.SetActive(state);
     }

@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public PlayerController p2;
     void Start()
     {
+        GameObject.FindObjectOfType<MusicManager>().RestartMusicWithFade();
     }
 
     void Update()

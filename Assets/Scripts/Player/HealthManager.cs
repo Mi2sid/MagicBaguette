@@ -11,6 +11,7 @@ public class HealthManager : MonoBehaviour
     private Image m_fillImage;
     public float m_maxLife;
     public List<float> m_lifes;
+    public SoundController sounds;
     int m_currentBar;
     void Awake()
     {
@@ -55,6 +56,7 @@ public class HealthManager : MonoBehaviour
 
     public void Dammage(float damage){
         bool needToChangeBarColor = false;
+
         while (damage > 0.0f && !isDead())
         {
             if (m_lifes[m_currentBar] > damage)

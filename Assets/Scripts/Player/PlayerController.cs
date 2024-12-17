@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Transform centerPoint;
 
     public PlayerController m_other;
+    public SoundController sounds;
 
     public HealthManager m_health;
     public ManaManager m_manaManager;
@@ -64,7 +65,10 @@ public class PlayerController : MonoBehaviour
                 isProtected = false;
             }
         }
-        if(takingDmg) return;
+        if(takingDmg) {
+            m_spellController.m_offence.SetActive(false);
+            return;
+        }
         transform.LookAt(m_other.transform.position);
 
         if(!canAct) return;
@@ -73,7 +77,6 @@ public class PlayerController : MonoBehaviour
 
     void OnMove(InputValue inputValue){
         float value = inputValue.Get<Vector2>().x;
-
         if(spellingMode){
             if(((int) value) == 0) return;
             
@@ -85,8 +88,6 @@ public class PlayerController : MonoBehaviour
             spellingMode = false;
             return;
         }
-
-
 
         if(invokeSpell){
             if(((int) value) == 0) return;
@@ -122,6 +123,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         if(!spellingMode){
+            sounds.PlayClick();
             spellingMode = true;
             m_direction = 0f;
             return;
@@ -129,7 +131,6 @@ public class PlayerController : MonoBehaviour
         m_spellController.m_currentSpell = 0;
         m_spellController.Fire();
         spellingMode = false;
-
     }
 
     void OnOther(){
@@ -138,6 +139,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         if(!spellingMode){
+            sounds.PlayClick();
             isProtected = false;
             return;
         }
